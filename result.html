@@ -157,7 +157,7 @@
 	<body>
 		<div id="main" class="wall">
 			<div class="result-title">获奖名单</div>
-    <div class="result-list" :class={isDeleted:!states[i]} v-for="(item,i) in results" @click="toggle(i)">
+    <div class="result-list" :class={isDeleted:!status[item]} v-for="(item,i) in results" @click="toggle(item)">
 				<div>{{item}}</div>
 			</div>
     </div>
@@ -172,17 +172,25 @@
 				el: '#main',
 				data: {
           results: [],
-          states:[]
+          status:{}
 				},
 				mounted() {
 					let locals = window.localStorage
 
-					let choosed = localStorage.getItem('choosed')
+          let choosed = localStorage.getItem('choosed')
+          let status=localStorage.getItem('status')
+
+          if(status){
+            status=JSON.parse(status)
+          }else{
+            status={}
+          }
+
 					let results = []
 
 					if (choosed) {
             choosed=JSON.parse(choosed)
-						results = Object.keys(choosed)
+            results = Object.keys(choosed)
 					}
 					// 分割每个string, 并将</br>换成空格
 
@@ -190,13 +198,22 @@
 					results = results.sort((x, y) => {
 						return x - y
           })
+          results.map((res)=>{
+            if(! status[res]){
+              status[res]=true
+            }
+          })
+
           console.log(results)
+          console.log(status)
           this.results = results
-          this.states=this.results.map(()=>{return true})
+          this.status={...status}
         },
         methods:{
           toggle(i){
-            this.$set(this.states,i,!this.states[i])
+            this.$set(this.status,i,!this.status[i])
+            console.log(this.status)
+            localStorage.setItem('status',JSON.stringify(this.status))
           }
         }
 			})
