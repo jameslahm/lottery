@@ -192,14 +192,12 @@
             choosed=JSON.parse(choosed)
             results = Object.keys(choosed)
 					}
-					// 分割每个string, 并将</br>换成空格
 
-					// 根据长度进行排序，名单短的放在前面
 					results = results.sort((x, y) => {
 						return x - y
           })
           results.map((res)=>{
-            if(! status[res]){
+            if(! res in status){
               status[res]=true
             }
           })
