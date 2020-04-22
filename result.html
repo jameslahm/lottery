@@ -197,7 +197,7 @@
 						return x - y
           })
           results.map((res)=>{
-            if(! res in status){
+            if(! (res in status)){
               status[res]=true
             }
           })
@@ -206,6 +206,7 @@
           console.log(status)
           this.results = results
           this.status={...status}
+          console.log(this.status)
         },
         methods:{
           toggle(i){
